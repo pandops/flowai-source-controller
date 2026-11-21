@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "error.reply.schema.json",
+  "title": "source-controller error reply body",
+  "description": "Body of every non-2xx source-controller reply (rule 9); NATS header status carries the status. request_id is absent only when the request carried no valid request_id header.",
+  "$ref": "#/$defs/error",
+  "$defs": {
+    "error": {
+      "description": "Error reply body (rule 9).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "message"],
+      "properties": {
+        "code": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]*$"
+        },
+        "message": {
+          "type": "string"
+        },
+        "request_id": {
+          "$ref": "#/$defs/id"
+        },
+        "fields": {
+          "description": "Invalid field paths, at most 100, never values.",
+          "type": "array",
+          "maxItems": 100,
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "id": {
+      "description": "FlowAI identifier: positive 64-bit integer (rule 43).",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9223372036854775807
+    }
+  }
+}

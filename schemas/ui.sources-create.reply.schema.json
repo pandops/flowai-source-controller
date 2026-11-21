@@ -1,0 +1,323 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ui.sources-create.reply.schema.json",
+  "title": "source-controller.ui.sources-create.pub reply",
+  "description": "201 with the one-time key. NATS header status carries the HTTP-equivalent status.",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/sourceWithKey"
+    },
+    {
+      "$ref": "#/$defs/error"
+    }
+  ],
+  "$defs": {
+    "anyTimestamp": {
+      "description": "RFC 3339 time as stored (REST bodies).",
+      "type": "string",
+      "format": "date-time"
+    },
+    "error": {
+      "description": "Error reply body (rule 9).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "message", "request_id"],
+      "properties": {
+        "code": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]*$"
+        },
+        "message": {
+          "type": "string"
+        },
+        "request_id": {
+          "$ref": "#/$defs/id"
+        },
+        "fields": {
+          "description": "Invalid field paths, at most 100, never values.",
+          "type": "array",
+          "maxItems": 100,
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "id": {
+      "description": "FlowAI identifier: positive 64-bit integer (rule 43).",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9223372036854775807
+    },
+    "intakeCounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "published",
+        "rejected",
+        "accepted",
+        "deduplicated",
+        "no_target",
+        "failed"
+      ],
+      "properties": {
+        "published": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "rejected": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "accepted": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "deduplicated": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "no_target": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "failed": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "lastPoll": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "poll_id",
+            "started_at",
+            "outcome",
+            "status",
+            "pages_read",
+            "returned_tasks",
+            "published_tasks",
+            "rejected_tasks",
+            "error_code",
+            "finished_at"
+          ],
+          "properties": {
+            "poll_id": {
+              "$ref": "#/$defs/id"
+            },
+            "started_at": {
+              "$ref": "#/$defs/anyTimestamp"
+            },
+            "outcome": {
+              "enum": [
+                "succeeded",
+                "http_error",
+                "timeout",
+                "invalid_response",
+                "url_rejected",
+                "not_started",
+                null
+              ]
+            },
+            "status": {
+              "enum": ["succeeded", "failed"]
+            },
+            "pages_read": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10
+            },
+            "returned_tasks": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "published_tasks": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "rejected_tasks": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "error_code": {
+              "type": ["string", "null"]
+            },
+            "finished_at": {
+              "$ref": "#/$defs/anyTimestamp"
+            }
+          }
+        }
+      ]
+    },
+    "polling": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "consecutive_failures",
+            "polling_blocked_at",
+            "next_poll_at"
+          ],
+          "properties": {
+            "consecutive_failures": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 5
+            },
+            "polling_blocked_at": {
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/anyTimestamp"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "next_poll_at": {
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/anyTimestamp"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "source": {
+      "description": "Operator view of a Source; never carries a key or digest.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "source_id",
+        "team_id",
+        "name",
+        "mode",
+        "contract_version",
+        "implementation_version",
+        "description",
+        "filter_summary",
+        "enabled",
+        "revision",
+        "settings_status",
+        "health",
+        "activity",
+        "intake_counts",
+        "created_at",
+        "polling",
+        "last_poll",
+        "webhook_url",
+        "last_seen_at"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "source_id": {
+          "$ref": "#/$defs/id"
+        },
+        "team_id": {
+          "$ref": "#/$defs/id"
+        },
+        "name": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9._~-]{1,63}$"
+        },
+        "mode": {
+          "enum": ["poller", "webhook"]
+        },
+        "contract_version": {
+          "const": "source.v1"
+        },
+        "implementation_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "description": {
+          "type": ["string", "null"],
+          "maxLength": 200
+        },
+        "filter_summary": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "settings_status": {
+          "enum": ["awaiting_schema", "incomplete", "complete"]
+        },
+        "health": {
+          "enum": ["never_seen", "healthy", "stale", "error"]
+        },
+        "activity": {
+          "enum": ["idle", "polling", "ingesting", "degraded", "error", null]
+        },
+        "intake_counts": {
+          "$ref": "#/$defs/intakeCounts"
+        },
+        "created_at": {
+          "$ref": "#/$defs/anyTimestamp"
+        },
+        "polling": {
+          "$ref": "#/$defs/polling"
+        },
+        "last_poll": {
+          "$ref": "#/$defs/lastPoll"
+        },
+        "webhook_url": {
+          "type": ["string", "null"]
+        },
+        "last_seen_at": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/anyTimestamp"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "observed_counters": {
+          "description": "Source-reported observations, labeled; not FlowAI counts.",
+          "type": ["object", "null"]
+        }
+      }
+    },
+    "sourceWithKey": {
+      "description": "One-time key reply (create, rotate, implementation update). Sent with Cache-Control: no-store.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "api_key"],
+      "properties": {
+        "source": {
+          "$ref": "#/$defs/source"
+        },
+        "api_key": {
+          "type": "string",
+          "pattern": "^tsk_v1_[A-Za-z0-9_-]{43}$"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ui.sources-get.request.schema.json",
+  "title": "source-controller.ui.sources-get.pub request",
+  "description": "GET /ui/v1/sources/{id}",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "params": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id"],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "id": {
+      "description": "FlowAI identifier: positive 64-bit integer (rule 43).",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9223372036854775807
+    }
+  }
+}

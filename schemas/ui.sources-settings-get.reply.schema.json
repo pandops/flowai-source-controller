@@ -1,0 +1,264 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ui.sources-settings-get.reply.schema.json",
+  "title": "source-controller.ui.sources-settings-get.pub reply",
+  "description": "200 settings; NATS reply header ETag \"rev-N\". NATS header status carries the HTTP-equivalent status.",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/settings"
+    },
+    {
+      "$ref": "#/$defs/error"
+    }
+  ],
+  "$defs": {
+    "anyTimestamp": {
+      "description": "RFC 3339 time as stored (REST bodies).",
+      "type": "string",
+      "format": "date-time"
+    },
+    "error": {
+      "description": "Error reply body (rule 9).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "message", "request_id"],
+      "properties": {
+        "code": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]*$"
+        },
+        "message": {
+          "type": "string"
+        },
+        "request_id": {
+          "$ref": "#/$defs/id"
+        },
+        "fields": {
+          "description": "Invalid field paths, at most 100, never values.",
+          "type": "array",
+          "maxItems": 100,
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "id": {
+      "description": "FlowAI identifier: positive 64-bit integer (rule 43).",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9223372036854775807
+    },
+    "lastPoll": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "poll_id",
+            "started_at",
+            "outcome",
+            "status",
+            "pages_read",
+            "returned_tasks",
+            "published_tasks",
+            "rejected_tasks",
+            "error_code",
+            "finished_at"
+          ],
+          "properties": {
+            "poll_id": {
+              "$ref": "#/$defs/id"
+            },
+            "started_at": {
+              "$ref": "#/$defs/anyTimestamp"
+            },
+            "outcome": {
+              "enum": [
+                "succeeded",
+                "http_error",
+                "timeout",
+                "invalid_response",
+                "url_rejected",
+                "not_started",
+                null
+              ]
+            },
+            "status": {
+              "enum": ["succeeded", "failed"]
+            },
+            "pages_read": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 10
+            },
+            "returned_tasks": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "published_tasks": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "rejected_tasks": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "error_code": {
+              "type": ["string", "null"]
+            },
+            "finished_at": {
+              "$ref": "#/$defs/anyTimestamp"
+            }
+          }
+        }
+      ]
+    },
+    "polling": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "consecutive_failures",
+            "polling_blocked_at",
+            "next_poll_at"
+          ],
+          "properties": {
+            "consecutive_failures": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 5
+            },
+            "polling_blocked_at": {
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/anyTimestamp"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "next_poll_at": {
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/anyTimestamp"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "settings": {
+      "description": "Safe settings representation of one Source.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_id",
+        "mode",
+        "settings_status",
+        "schema_revision",
+        "revision",
+        "platform",
+        "fields",
+        "polling",
+        "last_poll"
+      ],
+      "properties": {
+        "source_id": {
+          "$ref": "#/$defs/id"
+        },
+        "mode": {
+          "enum": ["poller", "webhook"]
+        },
+        "settings_status": {
+          "enum": ["awaiting_schema", "incomplete", "complete"]
+        },
+        "schema_revision": {
+          "type": ["integer", "null"],
+          "minimum": 1
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "platform": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "webhook_url": {
+              "type": ["string", "null"]
+            },
+            "poll_url": {
+              "type": ["string", "null"]
+            },
+            "poll_interval_minutes": {
+              "type": ["integer", "null"],
+              "minimum": 1,
+              "maximum": 1440
+            }
+          }
+        },
+        "fields": {
+          "type": "array",
+          "maxItems": 50,
+          "items": {
+            "type": "object",
+            "required": [
+              "name",
+              "label",
+              "type",
+              "required",
+              "default",
+              "value",
+              "overridden"
+            ],
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "label": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "type": {
+                "enum": ["string", "integer", "number", "boolean"]
+              },
+              "required": {
+                "type": "boolean"
+              },
+              "default": {
+                "type": ["string", "number", "boolean", "null"]
+              },
+              "value": {
+                "type": ["string", "number", "boolean", "null"]
+              },
+              "overridden": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "polling": {
+          "$ref": "#/$defs/polling"
+        },
+        "last_poll": {
+          "$ref": "#/$defs/lastPoll"
+        }
+      }
+    }
+  }
+}

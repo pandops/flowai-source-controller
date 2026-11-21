@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "service.binding-guard.reply.schema.json",
+  "title": "source-controller.service.binding-guard.pub reply",
+  "description": "200 new revisions, or 409 source_revision_conflict (also for unknown or foreign Sources). NATS header status carries the HTTP-equivalent status.",
+  "oneOf": [
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sources"],
+      "properties": {
+        "sources": {
+          "type": "array",
+          "maxItems": 64,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["source_id", "revision"],
+            "properties": {
+              "source_id": {
+                "$ref": "#/$defs/id"
+              },
+              "revision": {
+                "type": "integer",
+                "minimum": 2
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "$ref": "#/$defs/error"
+    }
+  ],
+  "$defs": {
+    "error": {
+      "description": "Error reply body (rule 9).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "message", "request_id"],
+      "properties": {
+        "code": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]*$"
+        },
+        "message": {
+          "type": "string"
+        },
+        "request_id": {
+          "$ref": "#/$defs/id"
+        },
+        "fields": {
+          "description": "Invalid field paths, at most 100, never values.",
+          "type": "array",
+          "maxItems": 100,
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "id": {
+      "description": "FlowAI identifier: positive 64-bit integer (rule 43).",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9223372036854775807
+    }
+  }
+}
