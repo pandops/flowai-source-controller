@@ -1,0 +1,30 @@
+# source-controller configuration. Values in <...> are required deployment
+# values; every other value shown is the default or the rule 16 path.
+http:
+  listen: ":8080" # one listener: webhooks, Source self routes, /v1/livez, /v1/readyz
+db:
+  host: <postgres-host>
+  port: 5432
+  user: <source-controller-role>
+  password: <source-controller-role-password>
+  database: flowai
+  schema: source_controller_schema # created by the deployment, owned by the role
+  sslmode: verify-full # the only accepted value
+  ca_file: /run/flowai/stand-ca/ca.pem
+nats:
+  url: tls://<nats-host>:4222
+  ca_file: /run/flowai/stand-ca/ca.pem
+  credentials_file: /run/flowai/nats/user.creds
+  inbox_prefix: _INBOX.source-controller
+  request_timeout: 5s
+public_base_url: <https://flowai.example> # origin of the public webhook URLs
+poll:
+  allowed_origins: # https origins a poll URL may use
+    - <https://poller.example>
+  signing_keys: # Ed25519 seeds (base64url, 32 bytes); the first signs
+    - id: <key-id>
+      seed: <base64url-seed>
+  ca_file: /run/flowai/trust/ca.pem # trust for poll callbacks
+cursor_keys: # HMAC keys for opaque cursors; the first signs
+  - id: 1
+    key_hex: <64-hex-characters>

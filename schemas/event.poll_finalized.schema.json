@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "event.poll_finalized.schema.json",
+  "title": "source-controller.event.poll_finalized.pub",
+  "description": "A poll was finalized (success, failure or lease expiry).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "publisher",
+    "publisher_seq",
+    "team_id",
+    "occurred_at",
+    "kind",
+    "source_id",
+    "poll_id",
+    "outcome",
+    "status",
+    "pages_read",
+    "published_count",
+    "rejected_count",
+    "error_code"
+  ],
+  "properties": {
+    "publisher": {
+      "const": "source-controller"
+    },
+    "publisher_seq": {
+      "$ref": "#/$defs/id"
+    },
+    "team_id": {
+      "$ref": "#/$defs/id"
+    },
+    "occurred_at": {
+      "$ref": "#/$defs/timestamp"
+    },
+    "kind": {
+      "const": "poll_finalized"
+    },
+    "source_id": {
+      "$ref": "#/$defs/id"
+    },
+    "poll_id": {
+      "$ref": "#/$defs/id"
+    },
+    "outcome": {
+      "enum": [
+        "succeeded",
+        "http_error",
+        "timeout",
+        "invalid_response",
+        "url_rejected",
+        "not_started",
+        null
+      ]
+    },
+    "status": {
+      "enum": ["succeeded", "failed"]
+    },
+    "pages_read": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 10
+    },
+    "published_count": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 1000
+    },
+    "rejected_count": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 1000
+    },
+    "error_code": {
+      "enum": [
+        null,
+        "http_error",
+        "timeout",
+        "invalid_response",
+        "url_rejected",
+        "not_started",
+        "lease_expired",
+        "intake_rejected"
+      ]
+    }
+  },
+  "$defs": {
+    "id": {
+      "description": "FlowAI identifier: positive 64-bit integer (rule 43).",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9223372036854775807
+    },
+    "timestamp": {
+      "description": "RFC 3339 UTC time with milliseconds.",
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{3}Z$"
+    }
+  }
+}

@@ -1,0 +1,166 @@
+{
+  "schemas": {
+    "svc/source-controller/schemas/audit.source_created.schema.json": [
+      "source-controller",
+      "audit"
+    ],
+    "svc/source-controller/schemas/audit.source_disabled.schema.json": [
+      "source-controller",
+      "audit"
+    ],
+    "svc/source-controller/schemas/audit.source_implementation_updated.schema.json": [
+      "source-controller",
+      "audit"
+    ],
+    "svc/source-controller/schemas/audit.source_key_rotated.schema.json": [
+      "source-controller",
+      "audit"
+    ],
+    "svc/source-controller/schemas/audit.source_polling_unblocked.schema.json": [
+      "source-controller",
+      "audit"
+    ],
+    "svc/source-controller/schemas/audit.source_settings_updated.schema.json": [
+      "source-controller",
+      "audit"
+    ],
+    "svc/source-controller/schemas/error.reply.schema.json": [
+      "source-controller",
+      "api-gateway",
+      "flow-registry"
+    ],
+    "svc/source-controller/schemas/event.poll_finalized.schema.json": [
+      "source-controller",
+      "journal",
+      "task-manager"
+    ],
+    "svc/source-controller/schemas/event.polling_blocked.schema.json": [
+      "source-controller",
+      "journal",
+      "task-manager"
+    ],
+    "svc/source-controller/schemas/event.schema_registered.schema.json": [
+      "source-controller",
+      "journal",
+      "task-manager"
+    ],
+    "svc/source-controller/schemas/event.source_status_reported.schema.json": [
+      "source-controller",
+      "journal",
+      "task-manager"
+    ],
+    "svc/source-controller/schemas/event.webhook_accepted.schema.json": [
+      "source-controller",
+      "journal",
+      "task-manager"
+    ],
+    "svc/source-controller/schemas/event.webhook_rejected.schema.json": [
+      "source-controller",
+      "journal",
+      "task-manager"
+    ],
+    "svc/source-controller/schemas/service.binding-guard.reply.schema.json": [
+      "source-controller",
+      "flow-registry"
+    ],
+    "svc/source-controller/schemas/service.binding-guard.request.schema.json": [
+      "source-controller",
+      "flow-registry"
+    ],
+    "svc/source-controller/schemas/service.sources-lookup.reply.schema.json": [
+      "source-controller",
+      "flow-registry"
+    ],
+    "svc/source-controller/schemas/service.sources-lookup.request.schema.json": [
+      "source-controller",
+      "flow-registry"
+    ],
+    "svc/source-controller/schemas/task.schema.json": [
+      "source-controller",
+      "task-manager"
+    ],
+    "svc/source-controller/schemas/ui.sources-create.reply.schema.json": [
+      "source-controller",
+      "api-gateway"
+    ],
+    "svc/source-controller/schemas/ui.sources-create.request.schema.json": [
+      "source-controller",
+      "api-gateway"
+    ],
+    "svc/source-controller/schemas/ui.sources-disable.reply.schema.json": [
+      "source-controller",
+      "api-gateway"
+    ],
+    "svc/source-controller/schemas/ui.sources-disable.request.schema.json": [
+      "source-controller",
+      "api-gateway"
+    ],
+    "svc/source-controller/schemas/ui.sources-get.reply.schema.json": [
+      "source-controller",
+      "api-gateway"
+    ],
+    "svc/source-controller/schemas/ui.sources-get.request.schema.json": [
+      "source-controller",
+      "api-gateway"
+    ],
+    "svc/source-controller/schemas/ui.sources-list.reply.schema.json": [
+      "source-controller",
+      "api-gateway"
+    ],
+    "svc/source-controller/schemas/ui.sources-list.request.schema.json": [
+      "source-controller",
+      "api-gateway"
+    ],
+    "svc/source-controller/schemas/ui.sources-rotate-key.reply.schema.json": [
+      "source-controller",
+      "api-gateway"
+    ],
+    "svc/source-controller/schemas/ui.sources-rotate-key.request.schema.json": [
+      "source-controller",
+      "api-gateway"
+    ],
+    "svc/source-controller/schemas/ui.sources-settings-get.reply.schema.json": [
+      "source-controller",
+      "api-gateway"
+    ],
+    "svc/source-controller/schemas/ui.sources-settings-get.request.schema.json": [
+      "source-controller",
+      "api-gateway"
+    ],
+    "svc/source-controller/schemas/ui.sources-settings-put.reply.schema.json": [
+      "source-controller",
+      "api-gateway"
+    ],
+    "svc/source-controller/schemas/ui.sources-settings-put.request.schema.json": [
+      "source-controller",
+      "api-gateway"
+    ],
+    "svc/source-controller/schemas/ui.sources-unblock-polling.reply.schema.json": [
+      "source-controller",
+      "api-gateway"
+    ],
+    "svc/source-controller/schemas/ui.sources-unblock-polling.request.schema.json": [
+      "source-controller",
+      "api-gateway"
+    ],
+    "svc/source-controller/schemas/ui.sources-update-implementation.reply.schema.json": [
+      "source-controller",
+      "api-gateway"
+    ],
+    "svc/source-controller/schemas/ui.sources-update-implementation.request.schema.json": [
+      "source-controller",
+      "api-gateway"
+    ],
+    "svc/task-manager/schemas/event.intake_processed.schema.json": [
+      "task-manager",
+      "journal",
+      "source-controller"
+    ],
+    "svc/team-registry/schemas/event.team_updated.schema.json": [
+      "team-registry",
+      "journal",
+      "source-controller",
+      "task-manager"
+    ]
+  }
+}

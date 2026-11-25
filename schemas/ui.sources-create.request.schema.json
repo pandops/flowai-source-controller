@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ui.sources-create.request.schema.json",
+  "title": "source-controller.ui.sources-create.pub request",
+  "description": "POST /ui/v1/sources",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "params": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [],
+      "properties": {}
+    },
+    "body": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "mode",
+        "contract_version",
+        "implementation_version",
+        "filter_summary"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9._~-]{1,63}$"
+        },
+        "mode": {
+          "enum": ["poller", "webhook"]
+        },
+        "contract_version": {
+          "const": "source.v1"
+        },
+        "implementation_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "filter_summary": {
+          "type": "string",
+          "maxLength": 200
+        }
+      }
+    }
+  },
+  "required": ["body"]
+}

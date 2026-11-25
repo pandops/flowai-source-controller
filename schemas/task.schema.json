@@ -1,0 +1,135 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "task.schema.json",
+  "title": "source-controller.task.<team>.pub intake message",
+  "description": "One message per accepted webhook request (1-100 tasks) or per polled task. Header team = team_id = subject <team>; Nats-Msg-Id = source-controller-<publisher_seq>.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "publisher",
+    "publisher_seq",
+    "team_id",
+    "occurred_at",
+    "source_id",
+    "origin",
+    "implementation_version",
+    "accepted_at",
+    "tasks"
+  ],
+  "properties": {
+    "publisher": {
+      "const": "source-controller"
+    },
+    "publisher_seq": {
+      "$ref": "#/$defs/id"
+    },
+    "team_id": {
+      "$ref": "#/$defs/id"
+    },
+    "occurred_at": {
+      "$ref": "#/$defs/timestamp"
+    },
+    "source_id": {
+      "$ref": "#/$defs/id"
+    },
+    "origin": {
+      "enum": ["webhook", "poll"]
+    },
+    "poll_id": {
+      "$ref": "#/$defs/id"
+    },
+    "page": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 10
+    },
+    "implementation_version": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64
+    },
+    "accepted_at": {
+      "$ref": "#/$defs/timestamp"
+    },
+    "tasks": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 100,
+      "items": {
+        "$ref": "#/$defs/intakeTask"
+      }
+    }
+  },
+  "if": {
+    "properties": {
+      "origin": {
+        "const": "poll"
+      }
+    }
+  },
+  "then": {
+    "required": ["poll_id", "page"],
+    "properties": {
+      "tasks": {
+        "maxItems": 1
+      }
+    }
+  },
+  "else": {
+    "not": {
+      "anyOf": [
+        {
+          "required": ["poll_id"]
+        },
+        {
+          "required": ["page"]
+        }
+      ]
+    }
+  },
+  "$defs": {
+    "id": {
+      "description": "FlowAI identifier: positive 64-bit integer (rule 43).",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9223372036854775807
+    },
+    "intakeTask": {
+      "description": "One source task entry of an intake message.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["intake_id", "external_id", "payload"],
+      "properties": {
+        "intake_id": {
+          "$ref": "#/$defs/id"
+        },
+        "external_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "payload": {
+          "type": "object"
+        },
+        "project_id": {
+          "type": ["string", "null"],
+          "maxLength": 128
+        },
+        "environment_id": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "timestamp": {
+      "description": "RFC 3339 UTC time with milliseconds.",
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{3}Z$"
+    }
+  }
+}

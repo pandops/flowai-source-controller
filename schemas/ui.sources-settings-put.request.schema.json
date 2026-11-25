@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ui.sources-settings-put.request.schema.json",
+  "title": "source-controller.ui.sources-settings-put.pub request",
+  "description": "PUT /ui/v1/sources/{id}/settings; NATS header If-Match \"rev-N\".",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "params": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id"],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        }
+      }
+    },
+    "body": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["values"],
+      "properties": {
+        "values": {
+          "type": "object",
+          "maxProperties": 50,
+          "additionalProperties": {
+            "type": ["string", "number", "boolean", "null"]
+          }
+        },
+        "poll_url": {
+          "type": ["string", "null"]
+        },
+        "poll_interval_minutes": {
+          "type": ["integer", "null"],
+          "minimum": 1,
+          "maximum": 1440
+        }
+      }
+    }
+  },
+  "required": ["body"],
+  "$defs": {
+    "id": {
+      "description": "FlowAI identifier: positive 64-bit integer (rule 43).",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9223372036854775807
+    }
+  }
+}

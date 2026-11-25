@@ -1,0 +1,16 @@
+[
+  {
+    "durable": "source-controller",
+    "stream": "ALL_EVENT",
+    "filter_subjects": [
+      "team-registry.event.team_created.sub",
+      "team-registry.event.team_updated.sub",
+      "team-registry.event.team_archived.sub",
+      "task-manager.event.intake_processed.sub"
+    ],
+    "ack_policy": "explicit",
+    "deliver_policy": "all",
+    "ack_wait_seconds": 30,
+    "max_ack_pending": 256
+  }
+]
