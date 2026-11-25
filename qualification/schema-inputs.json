@@ -1,0 +1,20 @@
+[
+  {
+    "digest": "sha256:5bb6eea9a1419dd7019c4a1998a83e57e71c277c3ecedd2f13f67c6a1023adc6",
+    "path": "schemas/defs.schema.json",
+    "repository": "pandops/flowai-task-manager",
+    "sourceRevision": "1398e8cc5a221dc8c39b5180f2af0a75bd826dd3"
+  },
+  {
+    "digest": "sha256:f7f4eeb380775bf4acabeda32cd0c3156b43b0025be110c4742f5feb526670d1",
+    "path": "schemas/event.intake_processed.schema.json",
+    "repository": "pandops/flowai-task-manager",
+    "sourceRevision": "1398e8cc5a221dc8c39b5180f2af0a75bd826dd3"
+  },
+  {
+    "digest": "sha256:6dcd09f53d70178d4cf77ac501644a51678c87570063d25127ebbfb26ac709e4",
+    "path": "schemas/event.team_updated.schema.json",
+    "repository": "pandops/flowai-team-registry",
+    "sourceRevision": "5463b8022fbdd6c7da908dff2cb1de4a5114aa13"
+  }
+]
